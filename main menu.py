@@ -30,6 +30,7 @@ scar = pygame.image.load("Scar.png")
 gameDisplay = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("Harry Potter - Snake")
 
+
 yaoi_availability = False
 font = pygame.font.Font('HARRYP__.TTF', 25)
 gameExit = False
