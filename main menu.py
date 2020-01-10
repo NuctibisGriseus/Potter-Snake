@@ -30,8 +30,7 @@ scar = pygame.image.load("Scar.png")
 gameDisplay = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("Harry Potter - Snake")
 
-
-yaoi_availability = False
+yaoi_availability = True
 font = pygame.font.Font('HARRYP__.TTF', 25)
 gameExit = False
 
@@ -105,6 +104,8 @@ def main_menu(money, headpic, bodypic, bscore):
                     blitz_play(money, headpic, bodypic, bscore)
                 elif item == 1:
                     shop_screen(money, headpic, bodypic, bscore)
+                elif item == 2:
+                    yaoi(money, headpic, bodypic, bscore)
 
         pointer = pygame.mouse.get_pos()
         for i in menu_items:
@@ -382,8 +383,53 @@ def shop_screen(money, headpic, bodypic, bscore):
         pygame.display.flip()
 
 
-def yaoi():
-    pass
+def yaoi(money, headpic, bodypic, bscore):
+    pictures = ['Картинки для пасхалки\drarry.jpg', 'Картинки для пасхалки\drarry1.jpg',
+                'Картинки для пасхалки\drarry2.jpg', 'Картинки для пасхалки\drarry3.jpg',
+                'Картинки для пасхалки\drarry4.jpg', 'Картинки для пасхалки\y2.jpg',
+                'Картинки для пасхалки\ls.jpg', 'Картинки для пасхалки\ls2.jpg',
+                'Картинки для пасхалки\drarre5.jpg', 'Картинки для пасхалки\snarre.jpg',
+                'Картинки для пасхалки\luci.jpg', 'Картинки для пасхалки\ewt.jpg',
+                'Картинки для пасхалки\snarry.jpg', 'Картинки для пасхалки\y1.jpg',
+                'Картинки для пасхалки\гаррерон.jpg', 'Картинки для пасхалки\снарре.jpg']
+    pos = 0
+    item = ''
+    home = (20, 50, 'Home', white, white, 33)
+    pygame.key.set_repeat()
+    pygame.mouse.set_visible(True)
+    done = False
+    while not done:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                main_menu(money, headpic, bodypic, bscore)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    if pos == 0:
+                        pos = 13
+                    else:
+                        pos -= 1
+                    gameDisplay.blit(pygame.image.load(pictures[pos]), [0, 0])
+                elif event.key == pygame.K_RIGHT:
+                    if pos == 13:
+                        pos = 0
+                    else:
+                        pos += 1
+                    gameDisplay.blit(pygame.image.load(pictures[pos]), [0, 0])
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    if item == 33:
+                        main_menu(money, headpic, bodypic, bscore)
+                pointer = pygame.mouse.get_pos()
+                if pointer[0] > home[0]:
+                    if pointer[0] < home[0] + 50:
+                        if pointer[1] > home[1]:
+                            if pointer[1] < home[1] + 50:
+                                item = home[5]
+
+                if item == home[5]:
+                    gameDisplay.blit(font.render(home[2], 1, home[4]), [home[0], home[1] - 40])
+                else:
+                    gameDisplay.blit(font.render(home[2], 1, home[3]), [home[0], home[1] - 40])
+            pygame.display.flip()
 
 
 main_menu(0, headharry, bodyharry, best_score)
