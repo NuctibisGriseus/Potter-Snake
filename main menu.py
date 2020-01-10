@@ -47,10 +47,10 @@ def snake(headim, bodyim, snakelist, snakehead, lead_x, lead_y):
 
 
 # фоны
-menu = pygame.image.load("bg.jpg")
-shop = pygame.image.load("bg.jpg")
+menu = pygame.image.load("menu.jpg")
+shop = pygame.image.load("shop.jpg")
 blitz = pygame.image.load("blitz.png")
-storyplay = pygame.image.load("bg.jpg")
+y = pygame.image.load("Картинки для пасхалки\y1.jpg")
 
 # количество галеонов
 galeon = 0
@@ -67,24 +67,15 @@ bodyhermi = 'Hermi Body.png'
 dumblehead = 'Dumldore.png'
 dumblebody = 'D_body.png'
 
-# картинки для пасхалок (слабонрвным не смотреть!)
-y1 = 'Картинки для пасхалки/drarry.jpg'
-y2 = 'Картинки для пасхалки/drarry1.jpg'
-y3 = 'Картинки для пасхалки/luci.jpg'
-y4 = 'Картинки для пасхалки/newt.jpg'
-y5 = 'Картинки для пасхалки/snarry.jpg'
-y6 = 'Картинки для пасхалки/y1.jpg'
-y7 = 'Картинки для пасхалки/гаррерон.jpg'
-y8 = 'Картинки для пасхалки/снарре.jpg'
 
 best_score = 0
 
 
 def main_menu(money, headpic, bodypic, bscore):
-    menu_items = [(160, 140, 'Blitz Play', (0, 0, 0), (0, 250, 0), 0),
-                  (160, 240, 'Shop and Converter', (0, 0, 0), (0, 0, 250), 1)]
+    menu_items = [(200, 140, 'Blitz Play', (0, 0, 0), (0, 250, 0), 0),
+                  (200, 220, 'Shop and Converter', (0, 0, 0), (0, 0, 250), 1)]
 
-    yaoi_collection = (160, 320, 'Yaoi Collection', (0, 0, 0), (250, 0, 0), 2)
+    yaoi_collection = (200, 300, 'Yaoi Collection', (0, 0, 0), (250, 0, 0), 2)
 
     if yaoi_availability:
         menu_items.append(yaoi_collection)
@@ -295,12 +286,12 @@ def blitz_play(money, headpic, bodypic, bscore):
 
 
 def shop_screen(money, headpic, bodypic, bscore):
-    buttons = [(160, 80, f" Harry Potter : Free", blue, white, 2),
-               (160, 140, f" N.E.E.T. : 2 Galeons", blue, white, 3),
-               (160, 200, f" Ron Weasly : 10 Galeons", blue, white, 4),
-               (160, 260, f" Hermione Granger : 15 Galeons", blue, white, 5),
-               (160, 320, f" Dumbldore : 30 Galeons", blue, white, 6),
-               (20, 50, 'Home', white, white, 33)]
+    buttons = [(160, 80, f" Harry Potter : Free", black, red, 2),
+               (160, 140, f" N.E.E.T. : 2 Galeons", black, red, 3),
+               (160, 200, f" Ron Weasly : 10 Galeons", black, red, 4),
+               (160, 260, f" Hermione Granger : 15 Galeons", black, red, 5),
+               (160, 320, f" Dumbldore : 30 Galeons", black, red, 6),
+               (20, 50, 'Home', white, blue, 33)]
     pygame.key.set_repeat()
     pygame.mouse.set_visible(True)
     done = False
@@ -365,8 +356,8 @@ def shop_screen(money, headpic, bodypic, bscore):
         gameDisplay.blit(pygame.image.load("Neet.png"), [100, 100])
         gameDisplay.blit(pygame.image.load("Ron_head.png"), [85, 145])
         gameDisplay.blit(pygame.image.load("Hermi.png"), [90, 210])
-        gameDisplay.blit(pygame.image.load("Dumldore.png"), [90, 275])
-        message_to_screen(''.join(["Galeons: ", str(money)]), white, 500, 10)
+        gameDisplay.blit(pygame.image.load("Dumldore.png"), [95, 275])
+        message_to_screen(''.join(["Galeons: ", str(money)]), black, 500, 10)
         pointer = pygame.mouse.get_pos()
         for i in buttons:
             if pointer[0] > i[0]:
@@ -385,11 +376,17 @@ def shop_screen(money, headpic, bodypic, bscore):
 
 def yaoi(money, headpic, bodypic, bscore):
     pictures = ['Картинки для пасхалки\drarry.jpg', 'Картинки для пасхалки\drarry1.jpg',
+                'Картинки для пасхалки\js.jpg', 'Картинки для пасхалки\dg.jpg',
+                'Картинки для пасхалки\ksts.jpg', 'Картинки для пасхалки\ewt1.jpg',
+                'Картинки для пасхалки\snape.jpg', 'Картинки для пасхалки\томми.jpg',
+                'Картинки для пасхалки\т1.jpg', 'Картинки для пасхалки\волди.jpg',
                 'Картинки для пасхалки\drarry2.jpg', 'Картинки для пасхалки\drarry3.jpg',
                 'Картинки для пасхалки\drarry4.jpg', 'Картинки для пасхалки\y2.jpg',
                 'Картинки для пасхалки\ls.jpg', 'Картинки для пасхалки\ls2.jpg',
                 'Картинки для пасхалки\drarre5.jpg', 'Картинки для пасхалки\snarre.jpg',
                 'Картинки для пасхалки\luci.jpg', 'Картинки для пасхалки\ewt.jpg',
+                'Картинки для пасхалки\drarry6.jpg', 'Картинки для пасхалки\drarry comic.jpg',
+                'Картинки для пасхалки\oppachki.jpg', 'Картинки для пасхалки\y3.jpg',
                 'Картинки для пасхалки\snarry.jpg', 'Картинки для пасхалки\y1.jpg',
                 'Картинки для пасхалки\гаррерон.jpg', 'Картинки для пасхалки\снарре.jpg']
     pos = 0
@@ -398,6 +395,7 @@ def yaoi(money, headpic, bodypic, bscore):
     pygame.key.set_repeat()
     pygame.mouse.set_visible(True)
     done = False
+    gameDisplay.blit(y, [0, 0])
     while not done:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -405,16 +403,18 @@ def yaoi(money, headpic, bodypic, bscore):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     if pos == 0:
-                        pos = 13
+                        pos = 27
                     else:
                         pos -= 1
                     gameDisplay.blit(pygame.image.load(pictures[pos]), [0, 0])
                 elif event.key == pygame.K_RIGHT:
-                    if pos == 13:
+                    if pos == 27:
                         pos = 0
                     else:
                         pos += 1
                     gameDisplay.blit(pygame.image.load(pictures[pos]), [0, 0])
+                elif event.key == pygame.K_ESCAPE:
+                    main_menu(money, headpic, bodypic, bscore)
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     if item == 33:
                         main_menu(money, headpic, bodypic, bscore)
