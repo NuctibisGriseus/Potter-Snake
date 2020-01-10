@@ -30,7 +30,7 @@ scar = pygame.image.load("Scar.png")
 gameDisplay = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("Harry Potter - Snake")
 
-yaoi_availability = True
+yaoi_availability = False
 font = pygame.font.Font('HARRYP__.TTF', 25)
 gameExit = False
 
@@ -71,13 +71,13 @@ dumblebody = 'D_body.png'
 best_score = 0
 
 
-def main_menu(money, headpic, bodypic, bscore):
+def main_menu(money, headpic, bodypic, bscore, yi):
     menu_items = [(200, 140, 'Blitz Play', (0, 0, 0), (0, 250, 0), 0),
                   (200, 220, 'Shop and Converter', (0, 0, 0), (0, 0, 250), 1)]
 
     yaoi_collection = (200, 300, 'Yaoi Collection', (0, 0, 0), (250, 0, 0), 2)
 
-    if yaoi_availability:
+    if yi:
         menu_items.append(yaoi_collection)
     pygame.key.set_repeat()
     pygame.mouse.set_visible(True)
@@ -92,11 +92,11 @@ def main_menu(money, headpic, bodypic, bscore):
                 sys.exit()
             if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
                 if item == 0:
-                    blitz_play(money, headpic, bodypic, bscore)
+                    blitz_play(money, headpic, bodypic, bscore, yi)
                 elif item == 1:
-                    shop_screen(money, headpic, bodypic, bscore)
+                    shop_screen(money, headpic, bodypic, bscore, yi)
                 elif item == 2:
-                    yaoi(money, headpic, bodypic, bscore)
+                    yaoi(money, headpic, bodypic, bscore, yi)
 
         pointer = pygame.mouse.get_pos()
         for i in menu_items:
@@ -114,7 +114,7 @@ def main_menu(money, headpic, bodypic, bscore):
         pygame.display.flip()
 
 
-def blitz_play(money, headpic, bodypic, bscore):
+def blitz_play(money, headpic, bodypic, bscore, yi):
     # координаты головы змейки
     lead_x = display_width / 2
     lead_y = display_height / 2
@@ -164,7 +164,7 @@ def blitz_play(money, headpic, bodypic, bscore):
                     lead_x_change = 0
                     lead_y_change = -block_size
                 elif event.key == pygame.K_ESCAPE:
-                    main_menu(money, headpic, bodypic, bscore)
+                    main_menu(money, headpic, bodypic, bscore, yi)
 
         # столкновение со стеной
         if lead_x >= display_width - block_size or lead_x < 0 or lead_y >= display_height - block_size or lead_y < 0:
@@ -227,7 +227,7 @@ def blitz_play(money, headpic, bodypic, bscore):
         if lead_x == fx and lead_y == fy:
             fx = round(random.randrange(40, 560) / block_size) * block_size
             fy = round(random.randrange(40, 560) / block_size) * block_size
-            if lives > 0:
+            if lives > 1:
                 lives -= 1
             else:
                 gameDisplay.blit(blitz, [0, 0])
@@ -285,7 +285,7 @@ def blitz_play(money, headpic, bodypic, bscore):
         pygame.time.delay(300)
 
 
-def shop_screen(money, headpic, bodypic, bscore):
+def shop_screen(money, headpic, bodypic, bscore, yi):
     buttons = [(160, 80, f" Harry Potter : Free", black, red, 2),
                (160, 140, f" N.E.E.T. : 2 Galeons", black, red, 3),
                (160, 200, f" Ron Weasly : 10 Galeons", black, red, 4),
@@ -304,7 +304,7 @@ def shop_screen(money, headpic, bodypic, bscore):
         gameDisplay.blit(shop, [0, 0])
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                main_menu(money, headpic, bodypic, bscore)
+                main_menu(money, headpic, bodypic, bscore, yi)
             if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
                 if item == 3:
                     if n_bought:
@@ -351,7 +351,9 @@ def shop_screen(money, headpic, bodypic, bscore):
                     bodypic = bodyharry
 
                 elif item == 33:
-                    main_menu(money, headpic, bodypic, bscore)
+                    main_menu(money, headpic, bodypic, bscore, yi)
+                if n_bought == h_bought == d_bought == r_bought == True:
+                    yi = True
         gameDisplay.blit(pygame.image.load("Harry Potter head.png"), [100, 35])
         gameDisplay.blit(pygame.image.load("Neet.png"), [100, 100])
         gameDisplay.blit(pygame.image.load("Ron_head.png"), [85, 145])
@@ -374,7 +376,7 @@ def shop_screen(money, headpic, bodypic, bscore):
         pygame.display.flip()
 
 
-def yaoi(money, headpic, bodypic, bscore):
+def yaoi(money, headpic, bodypic, bscore, yi):
     pictures = ['Картинки для пасхалки\drarry.jpg', 'Картинки для пасхалки\drarry1.jpg',
                 'Картинки для пасхалки\js.jpg', 'Картинки для пасхалки\dg.jpg',
                 'Картинки для пасхалки\ksts.jpg', 'Картинки для пасхалки\ewt1.jpg',
@@ -390,12 +392,13 @@ def yaoi(money, headpic, bodypic, bscore):
                 'Картинки для пасхалки\snarry.jpg', 'Картинки для пасхалки\y1.jpg',
                 'Картинки для пасхалки\гаррерон.jpg', 'Картинки для пасхалки\снарре.jpg']
     pos = 0
-    item = ''
-    home = (20, 50, 'Home', white, white, 33)
+    home = (20, 50, 'Press "Escape" To Return To The Menu', (235, 196, 0), black, 33)
     pygame.key.set_repeat()
     pygame.mouse.set_visible(True)
     done = False
     gameDisplay.blit(y, [0, 0])
+    gameDisplay.blit(font.render(home[2], 1, home[4]), [home[0], home[1] - 40])
+    gameDisplay.blit(font.render(home[2], 1, home[3]), [home[0], home[1] - 41])
     while not done:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -414,22 +417,12 @@ def yaoi(money, headpic, bodypic, bscore):
                         pos += 1
                     gameDisplay.blit(pygame.image.load(pictures[pos]), [0, 0])
                 elif event.key == pygame.K_ESCAPE:
-                    main_menu(money, headpic, bodypic, bscore)
-                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    if item == 33:
-                        main_menu(money, headpic, bodypic, bscore)
-                pointer = pygame.mouse.get_pos()
-                if pointer[0] > home[0]:
-                    if pointer[0] < home[0] + 50:
-                        if pointer[1] > home[1]:
-                            if pointer[1] < home[1] + 50:
-                                item = home[5]
+                    main_menu(money, headpic, bodypic, bscore, yi)
 
-                if item == home[5]:
-                    gameDisplay.blit(font.render(home[2], 1, home[4]), [home[0], home[1] - 40])
-                else:
-                    gameDisplay.blit(font.render(home[2], 1, home[3]), [home[0], home[1] - 40])
+                gameDisplay.blit(font.render(home[2], 1, home[4]), [home[0], home[1] - 40])
+                gameDisplay.blit(font.render(home[2], 1, home[3]), [home[0], home[1] - 41])
+
             pygame.display.flip()
 
 
-main_menu(0, headharry, bodyharry, best_score)
+main_menu(0, headharry, bodyharry, best_score, yaoi_availability)
