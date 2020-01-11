@@ -18,6 +18,8 @@ pygame.mixer.music.set_volume(0.1)
 blink_sound = pygame.mixer.Sound('blinc.wav')
 select_sound = pygame.mixer.Sound('select.wav')
 game_over = pygame.mixer.Sound('game_over.wav')
+minus_life = pygame.mixer.Sound('crestrage_collide.wav')
+buy = pygame.mixer.Sound('buy.wav')
 
 # задаем цвета заранее
 white = (255, 255, 255)
@@ -245,13 +247,15 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
             fx = round(random.randrange(40, 560) / block_size) * block_size
             fy = round(random.randrange(40, 560) / block_size) * block_size
             if lives > 1:
+                minus_life.play()
                 lives -= 1
             else:
                 your_game_is_over(money, headpic, bodypic, bscore, yi, n, r, h, d, m, score)
         if lead_x == sx and lead_y == sy:
             sx = round(random.randrange(40, 560) / block_size) * block_size
             sy = round(random.randrange(40, 560) / block_size) * block_size
-            if lives > 0:
+            if lives > 1:
+                minus_life.play()
                 lives -= 1
             else:
                 your_game_is_over(money, headpic, bodypic, bscore, yi, n, r, h, d, m, score)
@@ -259,6 +263,7 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
             thx = round(random.randrange(40, 560) / block_size) * block_size
             thy = round(random.randrange(40, 560) / block_size) * block_size
             if lives > 1:
+                minus_life.play()
                 lives -= 1
             else:
                 your_game_is_over(money, headpic, bodypic, bscore, yi, n, r, h, d, m, score)
@@ -314,6 +319,7 @@ def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
                         bodypic = bodyneet
                     else:
                         if money >= 2:
+                            buy.play()
                             money -= 2
                             headpic = headneet
                             bodypic = bodyneet
@@ -327,6 +333,7 @@ def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
                         bodypic = bodyron
                     else:
                         if money >= 10:
+                            buy.play()
                             money -= 10
                             headpic = headron
                             bodypic = bodyron
@@ -340,6 +347,7 @@ def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
                         bodypic = bodyhermi
                     else:
                         if money >= 15:
+                            buy.play()
                             money -= 15
                             headpic = headhermi
                             bodypic = bodyhermi
@@ -353,6 +361,7 @@ def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
                         bodypic = dumblebody
                     else:
                         if money >= 30:
+                            buy.play()
                             money -= 30
                             headpic = dumblehead
                             bodypic = dumblebody
@@ -366,6 +375,7 @@ def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
                         bodypic = dracobody
                     else:
                         if money >= 30:
+                            buy.play()
                             money -= 30
                             headpic = dracohead
                             bodypic = dracobody
