@@ -314,6 +314,7 @@ def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d):
 
     while not done:
         gameDisplay.blit(shop, [0, 0])
+        message_to_screen('Home', black, 21, 11)
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d)
@@ -372,14 +373,14 @@ def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d):
 
                 elif item == 33:
                     main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d)
-                if n == h == d == r == True:
+                if n and h and d and r is True:
                     yi = True
         gameDisplay.blit(pygame.image.load("Harry Potter head.png"), [100, 35])
         gameDisplay.blit(pygame.image.load("Neet.png"), [100, 100])
         gameDisplay.blit(pygame.image.load("Ron_head.png"), [85, 145])
         gameDisplay.blit(pygame.image.load("Hermi.png"), [90, 210])
         gameDisplay.blit(pygame.image.load("Dumldore.png"), [95, 275])
-        message_to_screen(''.join(["Galeons: ", str(money)]), black, 500, 10)
+        message_to_screen(''.join(["Galeons: ", str(money)]), black, 485, 10)
         pointer = pygame.mouse.get_pos()
         for i in buttons:
             if pointer[0] > i[0]:
@@ -428,7 +429,7 @@ def yaoi(money, headpic, bodypic, bscore, yi, n, r, h, d):
     while not done:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                main_menu(money, headpic, bodypic, bscore, yi)
+                main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     if pos == 0:
