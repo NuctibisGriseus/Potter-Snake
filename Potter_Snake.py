@@ -10,6 +10,15 @@ display_width = 600
 display_height = 600
 block_size = 25
 
+# подборка цитат)))
+quotes = ["Weasley is our king.", "Babbling, bumbling band of baboons.", "Are you Sirius?", "Siriusly!", "Bloody Hell",
+          "Wear that scar like a crown", "The boy who lived", "The boy who lived, died and lived again.",
+          "How can you be NEARLY headless?", "Alas! Earwax!", "Ps. The bird bites.", " Have you seen this wizard?!",
+          "I solemnly swear that I am up to no good.", "Turn to page 394.", "Merlin's pants!",
+          "Just take your egg and...mull things over in the water.", "What's got your want in a knot?", "You no poo"]
+
+magic_button = pygame.image.load('mystery_button.png')
+
 # Слышите - музычка!
 pygame.mixer.music.load('Я съем твой мозг.mp3')
 pygame.mixer.music.play(-1)
@@ -181,6 +190,10 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
     third_crest = random.choice(crestrages)
     crestrages.pop(crestrages.index(third_crest))
 
+    q = random.choice(quotes)
+
+    qu = False
+
     magix = round(random.randrange(50, 90) / block_size) * block_size
     magiy = round(random.randrange(50, 90) / block_size) * block_size
     coinx = round(random.randrange(80, 200) / block_size) * block_size
@@ -191,6 +204,8 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
     sy = round(random.randrange(80, 500) / block_size) * block_size
     thx = round(random.randrange(80, 500) / block_size) * block_size
     thy = round(random.randrange(80, 500) / block_size) * block_size
+    mbx = round(random.randrange(80, 500) / block_size) * block_size
+    mby = round(random.randrange(80, 500) / block_size) * block_size
 
     while not gamexit:
         for event in pygame.event.get():
@@ -242,6 +257,11 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
             coinx = round(random.randrange(40, 560) / block_size) * block_size
             coiny = round(random.randrange(40, 560) / block_size) * block_size
             money += 1
+        # столкновение с кнопкой
+        if lead_x == mbx and lead_y == mby:
+            mbx = 601
+            mby = 601
+            qu = True
         # столкновение с крестражами
         if lead_x == fx and lead_y == fy:
             fx = round(random.randrange(40, 560) / block_size) * block_size
@@ -272,7 +292,6 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
         message_to_screen(''.join(["Score: ", str(score)]), white, 10, 10)
         message_to_screen(''.join(["Galeons: ", str(money)]), white, 100, 10)
         message_to_screen(''.join(["Lives: ", str(lives)]), white, 210, 10)
-
         # отображение яблока
         gameDisplay.blit(pygame.image.load("Magic.png"), [magix, magiy])
         gameDisplay.blit(pygame.image.load("Galeon.png"), [coinx, coiny])
@@ -280,6 +299,10 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
         gameDisplay.blit(first_crest, [fx, fy])
         gameDisplay.blit(second_crest, [sx, sy])
         gameDisplay.blit(third_crest, [thx, thy])
+        # отображение кнопки
+        gameDisplay.blit(magic_button, [mbx, mby])
+        if qu:
+            message_to_screen(q, white, 20, 560)
         # отображение змейки
         snake(headpic, bodypic, snakelist, snakehead, lead_x, lead_y)
 
