@@ -10,6 +10,15 @@ display_width = 600
 display_height = 600
 block_size = 25
 
+# Слышите - музычка!
+pygame.mixer.music.load('Я съем твой мозг.mp3')
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.1)
+
+blink_sound = pygame.mixer.Sound('blinc.wav')
+select_sound = pygame.mixer.Sound('select.wav')
+game_over = pygame.mixer.Sound('game_over.wav')
+
 # задаем цвета заранее
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -102,10 +111,13 @@ def main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
                 sys.exit()
             if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
                 if item == 0:
+                    select_sound.play()
                     blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d, m)
                 elif item == 1:
+                    select_sound.play()
                     shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d, m)
                 elif item == 2:
+                    select_sound.play()
                     yaoi(money, headpic, bodypic, bscore, yi, n, r, h, d, m)
 
         pointer = pygame.mouse.get_pos()
@@ -125,6 +137,21 @@ def main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
             else:
                 gameDisplay.blit(font.render(i[2], 1, i[3]), [i[0], i[1] - 40])
         pygame.display.flip()
+
+
+def your_game_is_over(money, headpic, bodypic, bscore, yi, n, r, h, d, m, score):
+    pygame.mixer.music.pause()
+    game_over.play()
+    gameDisplay.blit(blitz, [0, 0])
+    message_to_screen(''.join(["Game Over! Score: ", str(score)]), white, 100, 200)
+    if score > bscore:
+        bscore = score
+    message_to_screen(''.join(["Best Score: ", str(bscore)]), white, 100, 250)
+    message_to_screen('Press "Escape" To Come Back To Menu', white, 100, 300)
+    pygame.display.update()
+    time.sleep(5)
+    pygame.mixer.music.play(-1)
+    blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d, m)
 
 
 def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
@@ -166,7 +193,7 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
     while not gamexit:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                gamexit = True
+                main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d, m)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     lead_x_change = -block_size
@@ -185,22 +212,7 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
 
         # столкновение со стеной
         if lead_x >= display_width - block_size or lead_x < 0 or lead_y >= display_height - block_size or lead_y < 0:
-            gameDisplay.blit(blitz, [0, 0])
-            message_to_screen(''.join(["Game Over! Score: ", str(score)]), white, 100, 200)
-            if score > bscore:
-                bscore = score
-            message_to_screen(''.join(["Best Score: ", str(bscore)]), white, 100, 250)
-            pygame.display.update()
-            score = 0
-            lead_y = 300
-            lead_x = 300
-            lead_x_change = 0
-            lives = 3
-            lead_y_change = 0
-            snakelength = 1
-            snakelist.clear()
-
-            time.sleep(2)
+            your_game_is_over(money, headpic, bodypic, bscore, yi, n, r, h, d, m, score)
 
         # движение змейки
         lead_x += lead_x_change
@@ -213,30 +225,18 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
         # столкновение змейки с самой собой
         for eachSegment in snakelist[:-1]:
             if eachSegment == snakehead:
-                gameDisplay.blit(blitz, [0, 0])
-                message_to_screen(''.join(["Game over! Score: ", str(score)]), white, 100, 200)
-                if score > bscore:
-                    bscore = score
-                message_to_screen(''.join(["Best Score: ", str(bscore)]), white, 100, 250)
-                pygame.display.update()
-                score = 0
-                lead_y = 300
-                lead_x = 300
-                lead_x_change = 0
-                lead_y_change = 0
-                snakelength = 1
-                lives = 3
-                snakelist.clear()
-                time.sleep(2)
+                your_game_is_over(money, headpic, bodypic, bscore, yi, n, r, h, d, m, score)
 
         # столкновение с магией
         if lead_x == magix and lead_y == magiy:
+            blink_sound.play()
             magix = round(random.randrange(40, 560) / block_size) * block_size
             magiy = round(random.randrange(40, 560) / block_size) * block_size
             snakelength += 1
             score += 1
         # столкновение с галеоном
         if lead_x == coinx and lead_y == coiny:
+            blink_sound.play()
             coinx = round(random.randrange(40, 560) / block_size) * block_size
             coiny = round(random.randrange(40, 560) / block_size) * block_size
             money += 1
@@ -247,63 +247,21 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
             if lives > 1:
                 lives -= 1
             else:
-                gameDisplay.blit(blitz, [0, 0])
-                message_to_screen(''.join(["Game over! Score: ", str(score)]), white, 100, 200)
-                if score > bscore:
-                    bscore = score
-                message_to_screen(''.join(["Best Score: ", str(bscore)]), white, 100, 250)
-                pygame.display.update()
-                score = 0
-                lead_y = 300
-                lead_x = 300
-                lead_x_change = 0
-                lead_y_change = 0
-                snakelength = 1
-                lives = 3
-                snakelist.clear()
-                time.sleep(2)
+                your_game_is_over(money, headpic, bodypic, bscore, yi, n, r, h, d, m, score)
         if lead_x == sx and lead_y == sy:
             sx = round(random.randrange(40, 560) / block_size) * block_size
             sy = round(random.randrange(40, 560) / block_size) * block_size
             if lives > 0:
                 lives -= 1
             else:
-                gameDisplay.blit(blitz, [0, 0])
-                message_to_screen(''.join(["Game over! Score: ", str(score)]), white, 100, 200)
-                if score > bscore:
-                    bscore = score
-                message_to_screen(''.join(["Best Score: ", str(bscore)]), white, 100, 250)
-                pygame.display.update()
-                score = 0
-                lead_y = 300
-                lead_x = 300
-                lead_x_change = 0
-                lead_y_change = 0
-                snakelength = 1
-                lives = 3
-                snakelist.clear()
-                time.sleep(2)
+                your_game_is_over(money, headpic, bodypic, bscore, yi, n, r, h, d, m, score)
         if lead_x == thx and lead_y == thy:
             thx = round(random.randrange(40, 560) / block_size) * block_size
             thy = round(random.randrange(40, 560) / block_size) * block_size
             if lives > 1:
                 lives -= 1
             else:
-                gameDisplay.blit(blitz, [0, 0])
-                message_to_screen(''.join(["Game over! Score: ", str(score)]), white, 100, 200)
-                if score > bscore:
-                    bscore = score
-                message_to_screen(''.join(["Best Score: ", str(bscore)]), white, 100, 250)
-                pygame.display.update()
-                score = 0
-                lead_y = 300
-                lead_x = 300
-                lead_x_change = 0
-                lead_y_change = 0
-                snakelength = 1
-                lives = 3
-                snakelist.clear()
-                time.sleep(2)
+                your_game_is_over(money, headpic, bodypic, bscore, yi, n, r, h, d, m, score)
         gameDisplay.blit(blitz, [0, 0])
         # отображение количества очков
         message_to_screen(''.join(["Score: ", str(score)]), white, 10, 10)
@@ -351,6 +309,7 @@ def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
             if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
                 if item == 3:
                     if n:
+                        select_sound.play()
                         headpic = headneet
                         bodypic = bodyneet
                     else:
@@ -363,6 +322,7 @@ def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
                             k[-1] = True
                 elif item == 4:
                     if r:
+                        select_sound.play()
                         headpic = headron
                         bodypic = bodyron
                     else:
@@ -375,6 +335,7 @@ def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
                             k[-1] = True
                 elif item == 5:
                     if h:
+                        select_sound.play()
                         headpic = headhermi
                         bodypic = bodyhermi
                     else:
@@ -387,6 +348,7 @@ def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
                             k[-1] = True
                 elif item == 6:
                     if d:
+                        select_sound.play()
                         headpic = dumblehead
                         bodypic = dumblebody
                     else:
@@ -399,6 +361,7 @@ def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
                             k[-1] = True
                 elif item == 7:
                     if m:
+                        select_sound.play()
                         headpic = dracohead
                         bodypic = dracobody
                     else:
@@ -410,10 +373,12 @@ def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
                             k = buttons[5]
                             k[-1] = True
                 elif item == 2:
+                    select_sound.play()
                     headpic = headharry
                     bodypic = bodyharry
 
                 elif item == 33:
+                    select_sound.play()
                     main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d, m)
                 if n and h and d and r and m is True:
                     yi = True
@@ -476,12 +441,14 @@ def yaoi(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
                 main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
+                    select_sound.play()
                     if pos == 0:
                         pos = 27
                     else:
                         pos -= 1
                     gameDisplay.blit(pygame.image.load(pictures[pos]), [0, 0])
                 elif event.key == pygame.K_RIGHT:
+                    select_sound.play()
                     if pos == 27:
                         pos = 0
                     else:
