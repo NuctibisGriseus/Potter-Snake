@@ -61,7 +61,7 @@ blitz = pygame.image.load("blitz.png")
 y = pygame.image.load("Картинки для пасхалки\y1.jpg")
 
 # количество галеонов
-galeon = 150
+galeon = 0
 
 # костюмы персонажей
 headharry = "Harry Potter Head.png"
