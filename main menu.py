@@ -22,6 +22,7 @@ n_bought = False
 r_bought = False
 h_bought = False
 d_bought = False
+m_bought = False
 
 # заливаем картинки крестражей
 slyth_medal = pygame.image.load("medal.png")
@@ -60,7 +61,7 @@ blitz = pygame.image.load("blitz.png")
 y = pygame.image.load("Картинки для пасхалки\y1.jpg")
 
 # количество галеонов
-galeon = 100
+galeon = 150
 
 # костюмы персонажей
 headharry = "Harry Potter Head.png"
@@ -73,12 +74,14 @@ headhermi = 'Hermi.png'
 bodyhermi = 'Hermi Body.png'
 dumblehead = 'Dumldore.png'
 dumblebody = 'D_body.png'
+dracohead = "malfoy_head.png"
+dracobody = 'malfoy_body.png'
 
 
 best_score = 0
 
 
-def main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d):
+def main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
     menu_items = [(200, 160, 'Blitz Play', (0, 0, 0), (0, 250, 0), 0),
                   (200, 240, 'Shop and Converter', (0, 0, 0), (0, 0, 250), 1)]
 
@@ -99,11 +102,11 @@ def main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d):
                 sys.exit()
             if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
                 if item == 0:
-                    blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d)
+                    blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d, m)
                 elif item == 1:
-                    shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d)
+                    shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d, m)
                 elif item == 2:
-                    yaoi(money, headpic, bodypic, bscore, yi, n, r, h, d)
+                    yaoi(money, headpic, bodypic, bscore, yi, n, r, h, d, m)
 
         pointer = pygame.mouse.get_pos()
         for i in menu_items:
@@ -124,7 +127,7 @@ def main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d):
         pygame.display.flip()
 
 
-def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d):
+def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
     # координаты головы змейки
     lead_x = display_width / 2
     lead_y = display_height / 2
@@ -146,6 +149,8 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d):
     crestrages.pop(crestrages.index(first_crest))
     second_crest = random.choice(crestrages)
     crestrages.pop(crestrages.index(second_crest))
+    third_crest = random.choice(crestrages)
+    crestrages.pop(crestrages.index(third_crest))
 
     magix = round(random.randrange(50, 90) / block_size) * block_size
     magiy = round(random.randrange(50, 90) / block_size) * block_size
@@ -155,6 +160,8 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d):
     fy = round(random.randrange(80, 500) / block_size) * block_size
     sx = round(random.randrange(80, 500) / block_size) * block_size
     sy = round(random.randrange(80, 500) / block_size) * block_size
+    thx = round(random.randrange(80, 500) / block_size) * block_size
+    thy = round(random.randrange(80, 500) / block_size) * block_size
 
     while not gamexit:
         for event in pygame.event.get():
@@ -174,7 +181,7 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d):
                     lead_x_change = 0
                     lead_y_change = -block_size
                 elif event.key == pygame.K_ESCAPE:
-                    main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d)
+                    main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d, m)
 
         # столкновение со стеной
         if lead_x >= display_width - block_size or lead_x < 0 or lead_y >= display_height - block_size or lead_y < 0:
@@ -222,13 +229,13 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d):
                 snakelist.clear()
                 time.sleep(2)
 
-        # столкновение с яблоком
+        # столкновение с магией
         if lead_x == magix and lead_y == magiy:
             magix = round(random.randrange(40, 560) / block_size) * block_size
             magiy = round(random.randrange(40, 560) / block_size) * block_size
             snakelength += 1
             score += 1
-        # столкновение с монеткой
+        # столкновение с галеоном
         if lead_x == coinx and lead_y == coiny:
             coinx = round(random.randrange(40, 560) / block_size) * block_size
             coiny = round(random.randrange(40, 560) / block_size) * block_size
@@ -276,6 +283,27 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d):
                 lives = 3
                 snakelist.clear()
                 time.sleep(2)
+        if lead_x == thx and lead_y == thy:
+            thx = round(random.randrange(40, 560) / block_size) * block_size
+            thy = round(random.randrange(40, 560) / block_size) * block_size
+            if lives > 1:
+                lives -= 1
+            else:
+                gameDisplay.blit(blitz, [0, 0])
+                message_to_screen(''.join(["Game over! Score: ", str(score)]), white, 100, 200)
+                if score > bscore:
+                    bscore = score
+                message_to_screen(''.join(["Best Score: ", str(bscore)]), white, 100, 250)
+                pygame.display.update()
+                score = 0
+                lead_y = 300
+                lead_x = 300
+                lead_x_change = 0
+                lead_y_change = 0
+                snakelength = 1
+                lives = 3
+                snakelist.clear()
+                time.sleep(2)
         gameDisplay.blit(blitz, [0, 0])
         # отображение количества очков
         message_to_screen(''.join(["Score: ", str(score)]), white, 10, 10)
@@ -288,6 +316,7 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d):
         # отображение крестража
         gameDisplay.blit(first_crest, [fx, fy])
         gameDisplay.blit(second_crest, [sx, sy])
+        gameDisplay.blit(third_crest, [thx, thy])
         # отображение змейки
         snake(headpic, bodypic, snakelist, snakehead, lead_x, lead_y)
 
@@ -295,19 +324,20 @@ def blitz_play(money, headpic, bodypic, bscore, yi, n, r, h, d):
         pygame.time.delay(300)
 
 
-def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d):
+def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
     buttons = [[160, 80, " Harry Potter : Free", black, red, 2, True],
                [160, 140, " N.E.E.T. : 2 Galeons", black, red, 3, False],
                [160, 200, " Ron Weasly : 10 Galeons", black, red, 4, False],
                [160, 260, " Hermione Granger : 15 Galeons", black, red, 5, False],
                [160, 320, " Dumbldore : 30 Galeons", black, red, 6, False],
+               [160, 380, " Draco : 30 Galeons", black, red, 7, False],
                [20, 50, 'Home', white, blue, 33]]
     pygame.key.set_repeat()
     pygame.mouse.set_visible(True)
     done = False
     item = 4
-    j = [n, r, h, d]
-    k = buttons[1:5]
+    j = [n, r, h, d, m]
+    k = buttons[1:6]
     for i in k:
         if i[-1] != j[k.index(i)]:
             i[-1] = j[k.index(i)]
@@ -317,7 +347,7 @@ def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d):
         message_to_screen('Home', black, 21, 11)
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
-                main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d)
+                main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d, m)
             if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
                 if item == 3:
                     if n:
@@ -367,19 +397,32 @@ def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d):
                             d = True
                             k = buttons[4]
                             k[-1] = True
+                elif item == 7:
+                    if m:
+                        headpic = dracohead
+                        bodypic = dracobody
+                    else:
+                        if money >= 30:
+                            money -= 30
+                            headpic = dracohead
+                            bodypic = dracobody
+                            m = True
+                            k = buttons[5]
+                            k[-1] = True
                 elif item == 2:
                     headpic = headharry
                     bodypic = bodyharry
 
                 elif item == 33:
-                    main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d)
-                if n and h and d and r is True:
+                    main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d, m)
+                if n and h and d and r and m is True:
                     yi = True
         gameDisplay.blit(pygame.image.load("Harry Potter head.png"), [100, 35])
         gameDisplay.blit(pygame.image.load("Neet.png"), [100, 100])
         gameDisplay.blit(pygame.image.load("Ron_head.png"), [85, 145])
         gameDisplay.blit(pygame.image.load("Hermi.png"), [90, 210])
         gameDisplay.blit(pygame.image.load("Dumldore.png"), [95, 275])
+        gameDisplay.blit(pygame.image.load("malfoy_head.png"), [100, 330])
         message_to_screen(''.join(["Galeons: ", str(money)]), black, 485, 10)
         pointer = pygame.mouse.get_pos()
         for i in buttons:
@@ -403,7 +446,7 @@ def shop_screen(money, headpic, bodypic, bscore, yi, n, r, h, d):
         pygame.display.flip()
 
 
-def yaoi(money, headpic, bodypic, bscore, yi, n, r, h, d):
+def yaoi(money, headpic, bodypic, bscore, yi, n, r, h, d, m):
     pictures = ['Картинки для пасхалки\drarry.jpg', 'Картинки для пасхалки\drarry1.jpg',
                 'Картинки для пасхалки\js.jpg', 'Картинки для пасхалки\dg.jpg',
                 'Картинки для пасхалки\ksts.jpg', 'Картинки для пасхалки\ewt1.jpg',
@@ -418,6 +461,7 @@ def yaoi(money, headpic, bodypic, bscore, yi, n, r, h, d):
                 'Картинки для пасхалки\oppachki.jpg', 'Картинки для пасхалки\y3.jpg',
                 'Картинки для пасхалки\snarry.jpg', 'Картинки для пасхалки\y1.jpg',
                 'Картинки для пасхалки\гаррерон.jpg', 'Картинки для пасхалки\снарре.jpg']
+
     pos = 0
     home = (20, 50, 'Press "Escape" To Return To The Menu', (235, 196, 0), black, 33)
     pygame.key.set_repeat()
@@ -444,7 +488,7 @@ def yaoi(money, headpic, bodypic, bscore, yi, n, r, h, d):
                         pos += 1
                     gameDisplay.blit(pygame.image.load(pictures[pos]), [0, 0])
                 elif event.key == pygame.K_ESCAPE:
-                    main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d)
+                    main_menu(money, headpic, bodypic, bscore, yi, n, r, h, d, m)
 
                 gameDisplay.blit(font.render(home[2], 1, home[4]), [home[0], home[1] - 40])
                 gameDisplay.blit(font.render(home[2], 1, home[3]), [home[0], home[1] - 41])
@@ -452,4 +496,4 @@ def yaoi(money, headpic, bodypic, bscore, yi, n, r, h, d):
             pygame.display.flip()
 
 
-main_menu(galeon, headharry, bodyharry, best_score, yaoi_availability, n_bought, r_bought, h_bought, d_bought)
+main_menu(galeon, headharry, bodyharry, best_score, yaoi_availability, n_bought, r_bought, h_bought, d_bought, m_bought)
